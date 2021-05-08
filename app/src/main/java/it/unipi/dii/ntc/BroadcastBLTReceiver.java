@@ -26,28 +26,30 @@ public class BroadcastBLTReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+        if (BluetoothDevice.ACTION_NAME_CHANGED.equals(action)) {
+
             // Discovery has found a device. Get the BluetoothDevice
             // object and its info from the Intent.
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             String deviceName = device.getName();
             String deviceHardwareAddress = device.getAddress(); // MAC address
-            discoveredBLT.put(deviceName, deviceHardwareAddress);
+            Log.i(TAG, "onReceive: Trovato dispositivo " + deviceName);
+            Log.i(TAG, "onReceive: Trovato dispositivo " + deviceHardwareAddress);
+            discoveredBLT.put(deviceHardwareAddress, deviceName);
         }
         else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
             //Update grafic interface
-            TableRow row = new TableRow(context);
-            TextView tx = new TextView(context);
-            tx.setText("DEVICE NOT DISCOVERED");
-            row.addView(tx);
-            BLTTable.addView(row);
-            Log.i(TAG, "onReceive: FINISHED DISCOVERY AHAHAHAHAHAHAH");
 
             Set<String> keys = discoveredBLT.keySet();
             for (String key: keys){
-                row = new TableRow(context);
-                tx = new TextView(context);
-                tx.setText(key);
+                TableRow row = new TableRow(context);
+                TextView tx = new TextView(context);
+                String tmp = discoveredBLT.get(key);
+                if (tmp.equals(null)){
+                    tx.setText(key);
+                }else{
+                    tx.setText(tmp);
+                }
                 row.addView(tx);
                 BLTTable.addView(row);
             }
