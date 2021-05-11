@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -40,9 +41,12 @@ public class BroadcastBLTReceiver extends BroadcastReceiver {
         else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
             //Update grafic interface
 
+            //TODO: Delete the below line
+            discoveredBLT.put("Test", "Data");
             Set<String> keys = discoveredBLT.keySet();
             for (String key: keys){
                 TableRow row = new TableRow(context);
+
                 TextView tx = new TextView(context);
                 String tmp = discoveredBLT.get(key);
                 if (tmp.equals(null)){
@@ -50,7 +54,17 @@ public class BroadcastBLTReceiver extends BroadcastReceiver {
                 }else{
                     tx.setText(tmp);
                 }
+
+                //This adds to the row a click listener
+                // (Need to save device data on database)
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.i(TAG, "Cliccato ");
+                    }
+                });
                 row.addView(tx);
+
                 BLTTable.addView(row);
             }
         }

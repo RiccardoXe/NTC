@@ -28,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    public void showStoredDevices(View vApp){
+        Intent myIntent = new Intent(MainActivity.this, Show_devices.class);
+        MainActivity.this.startActivity(myIntent);
+    }
+
     public void startBLTScan(View vApp){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                 checkPermission(Manifest.permission.ACTIVITY_RECOGNITION, ACTIVITY_RECOGNITION_PERMISSION_CODE);
