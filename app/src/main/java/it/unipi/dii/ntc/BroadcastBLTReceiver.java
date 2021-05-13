@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.TableLayout;
@@ -22,9 +21,9 @@ public class BroadcastBLTReceiver extends BroadcastReceiver
 	private static final String TAG = MainActivity.class.getName();
 	private final HashMap<String, String> discoveredBLT = new HashMap<>();
 	private final TableLayout BLTTable;
-	private final Add_devices aDevices;
+	private final Add_devices_Activity aDevices;
 
-	public BroadcastBLTReceiver(TableLayout BLTTable, Add_devices a)
+	public BroadcastBLTReceiver(TableLayout BLTTable, Add_devices_Activity a)
 	{
 		this.BLTTable = BLTTable;
 		aDevices = a;
@@ -51,6 +50,7 @@ public class BroadcastBLTReceiver extends BroadcastReceiver
 		//Show the discovered devices on the table in Add_devices object - UI update
 		else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 			Set<String> keys = discoveredBLT.keySet();
+			BLTTable.removeAllViews();
 			for (String key : keys) {
 				TableRow row = new TableRow(context);
 				TextView tx = new TextView(context);
@@ -82,6 +82,7 @@ public class BroadcastBLTReceiver extends BroadcastReceiver
 				BLTTable.addView(row);
 				deviceCounter++;
 			}
+			//discoveredBLT.clear();
 		}
 	}
 

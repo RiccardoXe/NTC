@@ -28,12 +28,12 @@ public class MainActivity extends AppCompatActivity
 		setContentView(R.layout.activity_main);
 	}
 
-    public void showStoredDevices(View vApp){
-        Intent myIntent = new Intent(MainActivity.this, Show_devices.class);
-        MainActivity.this.startActivity(myIntent);
-    }
 
-
+	/**
+	 * Function called by pressing Button:"Add Devices"
+	 * Makes an intent to start Add_device_activity
+	 * @param vApp
+	 */
 	public void startBLTScan(View vApp)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity
 			checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
 				ACCESS_BACKGROUND_LOCATION_PERMISSION_CODE);
 
-		Intent myIntent = new Intent(MainActivity.this, Add_devices.class);
+		Intent myIntent = new Intent(MainActivity.this, Add_devices_Activity.class);
 		MainActivity.this.startActivity(myIntent);
 	}
 
@@ -77,8 +77,13 @@ public class MainActivity extends AppCompatActivity
 		Log.d(TAG, permissionName + " " + (granted ? "granted." : "denied."));
 	}
 
+	/**
+	 * Method called pressing the button:"Start monitorin"
+	 * Make an Intent and start Monitoring_devices_activity
+	 * @param vApp
+	 */
 	public void startMonitoring(View vApp){
-		Intent myIntent = new Intent(MainActivity.this, Monitoring_devices.class);
+		Intent myIntent = new Intent(MainActivity.this, Monitoring_devices_Activity.class);
 		MainActivity.this.startActivity(myIntent);
 	}
 }
