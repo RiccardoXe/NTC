@@ -33,13 +33,6 @@
                 android:layout_weight="1"
                 android:text="Device Name" />
         </TableRow>
-        <TableRow android:background="#DAE8FC" android:padding="5dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Android Riccardo" />
-        </TableRow>
 
     </TableLayout>
 

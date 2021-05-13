@@ -76,4 +76,9 @@ public class MainActivity extends AppCompatActivity
 		boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
 		Log.d(TAG, permissionName + " " + (granted ? "granted." : "denied."));
 	}
+
+	public void startMonitoring(View vApp){
+		Intent myIntent = new Intent(MainActivity.this, Monitoring_devices.class);
+		MainActivity.this.startActivity(myIntent);
+	}
 }

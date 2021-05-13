@@ -8,24 +8,49 @@
 
     <TableLayout
         android:id="@+id/BLTDevices"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp" >
-        <TableRow android:background="#0079D6" android:padding="5dp">
+        android:paddingRight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.13">
+
+        <TableRow
+            android:background="#0079D6"
+            android:padding="5dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Device Name" />
+                android:text="Discovered Devices" />
         </TableRow>
-        <TableRow android:background="#DAE8FC" android:padding="5dp">
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/BLTFriends"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7">
+
+        <TableRow
+            android:background="#0079D6"
+            android:padding="5dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Android Riccardo" />
+                android:text="Already Metched Devices" />
         </TableRow>
     </TableLayout>
 
