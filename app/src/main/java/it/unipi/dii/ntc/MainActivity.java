@@ -1,14 +1,18 @@
 package it.unipi.dii.ntc;
 
 import android.Manifest;
+import android.app.ActivityManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity
@@ -21,11 +25,22 @@ public class MainActivity extends AppCompatActivity
 	private static final String TAG = MainActivity.class.getName();
 	private static final int REQUEST_ENABLE_BT = 1234;
 
+	private Intent monitoringIntent;
+
+	private boolean serviceRunning = false;
+
+	@RequiresApi(api = Build.VERSION_CODES.M)
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		// Check if the detecton service is enabled
+		serviceRunning = isServiceRunning();
+		Log.i("INFO", "THE SERVICE IS RUNNINIG" + serviceRunning);
+		setScanningButtonValue();
+
 	}
 
 
@@ -82,8 +97,61 @@ public class MainActivity extends AppCompatActivity
 	 * Make an Intent and start Monitoring_devices_activity
 	 * @param vApp
 	 */
+	@RequiresApi(api = Build.VERSION_CODES.O)
 	public void startMonitoring(View vApp){
-		Intent myIntent = new Intent(MainActivity.this, Monitoring_devices_Activity.class);
-		MainActivity.this.startActivity(myIntent);
+
+
+		if(serviceRunning == false) {
+			/* ACTIVATE BLUETOOTH */
+			BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+			//Check if bluetooth is supported
+			if (bluetoothAdapter == null)
+				Log.e(TAG, "startMonitoring: Device doesn't support bluetooth.");
+
+				//Check if bluetooth is enabled
+				//TODO: Wait untill bluetooth is activated
+			else if (!bluetoothAdapter.isEnabled()) {
+				Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+				startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+			}
+			checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_LOCATION_STATE_PERMISSION_CODE);
+			if (!bluetoothAdapter.isDiscovering()) {
+				Log.i(TAG, "onCreate: isDiscovering " + bluetoothAdapter.startDiscovery());
+			}
+
+
+			Intent intentRSSIScan = new Intent(MainActivity.this, RSSIScan_Service.class);
+			startForegroundService(intentRSSIScan);
+		}
+		else{
+			getApplicationContext().stopService(new Intent(MainActivity.this, RSSIScan_Service.class));
+			//getApplicationContext().stopService(Intent(this, RSSIScan_Service::class.java));
+		}
+
+		serviceRunning = !serviceRunning;
+		setScanningButtonValue();
+	}
+
+	@RequiresApi(api = Build.VERSION_CODES.M)
+	private boolean isServiceRunning()
+	{
+		ActivityManager manager = (ActivityManager) getSystemService(getApplicationContext().ACTIVITY_SERVICE);
+		for (ActivityManager.RunningServiceInfo service: manager.getRunningServices(Integer.MAX_VALUE))
+			if (RSSIScan_Service.class.getName().equals(service.service.getClassName()))
+				return true;
+		return false;
+	}
+
+	public void setScanningButtonValue()
+	{
+		Button monitoringButton;
+		monitoringButton = (Button) findViewById(R.id.monitoringButton);
+		if(serviceRunning == true){
+			monitoringButton.setText("STOP MONITORING");
+		}
+		else{
+			monitoringButton.setText("START MONITORING");
+		}
 	}
 }

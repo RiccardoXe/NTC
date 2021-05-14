@@ -92,7 +92,7 @@ public class RSSIScan_Service extends Service
 	@Override
 	public void onDestroy()
 	{
-		Log.i("CALLED THIS", "WWWWW");
+		Log.i("RSSI_SERVICE", "DESTROYED SERVICE");
 		super.onDestroy();
 		getApplicationContext().unregisterReceiver(RSSIReceiver);
 	}

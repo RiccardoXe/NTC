@@ -44,7 +44,7 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 			int RSSIValue =  intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
 			Log.i(TAG, "onReceive: Trovato dispositivo " + RSSIValue);
 			Log.i(TAG, "onReceive: Trovato dispositivo " + deviceHardwareAddress);
-			// TODO: Put a dynamic Trashold instead of -45 and check if stored device
+			// TODO: Put a dynamic Threshold instead of -45 and check if stored device
 			if(RSSIValue > -45){
 				rssiService.createNotification("AN UNKNOWN DEVICE IS NEAR!!!");
 			}
