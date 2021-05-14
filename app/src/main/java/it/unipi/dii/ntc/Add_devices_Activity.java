@@ -30,6 +30,7 @@ public class Add_devices_Activity extends AppCompatActivity
 	private static final String TAG = Add_devices_Activity.class.getName();
 	private static final int REQUEST_ENABLE_BT = 1234;
 	private static final int ACCESS_FINE_LOCATION_STATE_PERMISSION_CODE = 1024;
+	private String prefFileName = "StoredDevices";
 	private BroadcastBLTReceiver BLTReceiver;
 
 	@RequiresApi(api = Build.VERSION_CODES.M)
@@ -75,7 +76,7 @@ public class Add_devices_Activity extends AppCompatActivity
 	 * @param value - Name of the device (if not presente NO_DEVICE_NAME by default)
 	 */
 	public void addElementToShared(String key, String value){
-		SharedPreferences sharedPref = Add_devices_Activity.this.getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences sharedPref = getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
 		editor.putString(key, value);
 		editor.commit();
@@ -86,7 +87,7 @@ public class Add_devices_Activity extends AppCompatActivity
 	 * @param key - MAC address of the device to be no longer recognized
 	 */
 	public void deleteElementFromShared(String key){
-		SharedPreferences sharedPref = Add_devices_Activity.this.getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences sharedPref = getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
 		editor.remove(key);
 		editor.commit();
@@ -100,7 +101,7 @@ public class Add_devices_Activity extends AppCompatActivity
 	 */
 	public void fillTableMatchedDevices(){
 		int deviceCounter = 0;
-		SharedPreferences sharedPref = Add_devices_Activity.this.getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences sharedPref = getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
 
 		//Find the tableLayout BLTFriend
 		TableLayout tViewMatched = findViewById(R.id.BLTFriends);

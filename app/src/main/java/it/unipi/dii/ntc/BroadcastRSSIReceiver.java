@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.TableLayout;
@@ -23,6 +24,7 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 
 	private static final String TAG = MainActivity.class.getName();
 	private RSSIScan_Service rssiService;
+	private String prefFileName = "StoredDevices";
 	private int TimeToSleep = 5000;
 
 	public BroadcastRSSIReceiver(RSSIScan_Service rssiS){
@@ -34,6 +36,7 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 	{
 		int deviceCounter = 0;
 		String action = intent.getAction();
+		SharedPreferences sharedPref = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
 		//Device Discovery phase
 		if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 			// Discovery has found a device. Get the BluetoothDevice
@@ -45,14 +48,23 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 			Log.i(TAG, "onReceive: Trovato dispositivo " + RSSIValue);
 			Log.i(TAG, "onReceive: Trovato dispositivo " + deviceHardwareAddress);
 			// TODO: Put a dynamic Threshold instead of -45 and check if stored device
-			if(RSSIValue > -45){
-				rssiService.createNotification("AN UNKNOWN DEVICE IS NEAR!!!");
+			if (RSSIValue > -65) {
+				if(sharedPref.contains(" "+deviceHardwareAddress) == true){
+					rssiService.createNotification(device.getName() + " :) FRIEND" );
+				}
+				else {
+					rssiService.createNotification(device.getName() + " UNKNOWN DEVICE!!!");
+				}
 			}
 		}
 		else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
 			Log.v("RSSI:","Discovery start back in 5s ");
-			SystemClock.sleep(TimeToSleep);
-			BluetoothAdapter.getDefaultAdapter().startDiscovery();
+			//try {
+			//	Thread.sleep(TimeToSleep);
+			//} catch (InterruptedException e) {
+			//	e.printStackTrace();
+			//}
+
 		}
 	}
 

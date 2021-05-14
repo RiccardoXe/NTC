@@ -12,7 +12,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.TableLayout;
 
@@ -20,7 +22,9 @@ import androidx.core.app.NotificationCompat;
 
 public class RSSIScan_Service extends Service
 {
+	private static final String TAG = "RSSI-SERVICE" ;
 	private BroadcastRSSIReceiver RSSIReceiver;
+	private static final long PERIODIC_DELAY = 20000;
 
 	public RSSIScan_Service()
 	{
@@ -46,6 +50,22 @@ public class RSSIScan_Service extends Service
 		BLTIntFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		RSSIReceiver = new BroadcastRSSIReceiver(this);
 		getApplicationContext().registerReceiver(RSSIReceiver, BLTIntFilter);
+
+		Handler periodicHandler = new Handler(Looper.getMainLooper());
+		Runnable periodicRunnable = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				periodicHandler.postDelayed(this, PERIODIC_DELAY);
+				if (!BluetoothAdapter.getDefaultAdapter().isEnabled())
+					Log.w(TAG, "Bluetooth is not enabled.");
+				else if (!BluetoothAdapter.getDefaultAdapter().isDiscovering())
+					if (!BluetoothAdapter.getDefaultAdapter().startDiscovery())
+						Log.e(TAG, "Failed to start BT discovery.");
+			}
+		};
+		periodicHandler.post(periodicRunnable);
 
 	}
 	@Override

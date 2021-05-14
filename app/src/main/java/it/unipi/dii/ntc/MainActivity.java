@@ -93,8 +93,10 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	/**
-	 * Method called pressing the button:"Start monitorin"
+	 * Method called pressing the button:"Start monitoring"
 	 * Make an Intent and start Monitoring_devices_activity
+	 * 	if the discovery sercice is not running -> Bluetooth enabled and monitoring started
+	 * 	if the discovery service is already running -> Stop the service
 	 * @param vApp
 	 */
 	@RequiresApi(api = Build.VERSION_CODES.O)
