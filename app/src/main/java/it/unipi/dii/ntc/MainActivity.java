@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -155,29 +154,10 @@ public class MainActivity extends AppCompatActivity
 	{
 		Button monitoringButton;
 		monitoringButton = (Button) findViewById(R.id.monitoringButton);
-		if(serviceRunning == true){
+		if (serviceRunning == true) {
 			monitoringButton.setText("STOP MONITORING");
-		}
-		else{
+		} else {
 			monitoringButton.setText("START MONITORING");
-		}
-	}
-
-	public void startCalibration(){
-		File outputFile = new File(getFilesDir() + File.separator + "collected-data.csv");
-		if (!outputFile.exists()) {
-			CSVWriter writer;
-			try {
-				writer = new CSVWriter(new FileWriter(outputFile, true),
-					',', '"', '\\', "\n");
-				writer.writeNext(
-					new String[]{"MAC", "RSSI"},
-					false);
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				return;
-			}
 		}
 	}
 }

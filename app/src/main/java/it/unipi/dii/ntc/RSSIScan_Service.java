@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -15,16 +16,24 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.util.Log;
 import android.widget.TableLayout;
 
 import androidx.core.app.NotificationCompat;
 
+import it.unipi.dii.iodetectionlib.IODetection;
+
 public class RSSIScan_Service extends Service
 {
-	private static final String TAG = "RSSI-SERVICE" ;
+	private static final String TAG = RSSIScan_Service.class.getName();
 	private BroadcastRSSIReceiver RSSIReceiver;
 	private static final long PERIODIC_DELAY = 20000;
+	private PowerManager.WakeLock mWakeLock;
+	private static final long WAKELOCK_TIMEOUT = 2 * 60 * 1000;
+	private Handler periodicHandler;
+	private Runnable periodicRunnable;
+	private IODetection ioDetection;
 
 	public RSSIScan_Service()
 	{
@@ -48,11 +57,11 @@ public class RSSIScan_Service extends Service
 		IntentFilter BLTIntFilter = new IntentFilter();
 		BLTIntFilter.addAction(BluetoothDevice.ACTION_FOUND);
 		BLTIntFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-		RSSIReceiver = new BroadcastRSSIReceiver(this);
+		ioDetection = new IODetection(getApplicationContext());
+		RSSIReceiver = new BroadcastRSSIReceiver(this, ioDetection);
 		getApplicationContext().registerReceiver(RSSIReceiver, BLTIntFilter);
-
-		Handler periodicHandler = new Handler(Looper.getMainLooper());
-		Runnable periodicRunnable = new Runnable()
+		periodicHandler = new Handler(Looper.getMainLooper());
+		periodicRunnable = new Runnable()
 		{
 			@Override
 			public void run()
@@ -63,9 +72,14 @@ public class RSSIScan_Service extends Service
 				else if (!BluetoothAdapter.getDefaultAdapter().isDiscovering())
 					if (!BluetoothAdapter.getDefaultAdapter().startDiscovery())
 						Log.e(TAG, "Failed to start BT discovery.");
+				if (!mWakeLock.isHeld())
+					mWakeLock.acquire(WAKELOCK_TIMEOUT);
 			}
 		};
 		periodicHandler.post(periodicRunnable);
+		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+		mWakeLock.acquire(WAKELOCK_TIMEOUT);
 
 	}
 	@Override
@@ -115,5 +129,10 @@ public class RSSIScan_Service extends Service
 		Log.i("RSSI_SERVICE", "DESTROYED SERVICE");
 		super.onDestroy();
 		getApplicationContext().unregisterReceiver(RSSIReceiver);
+		if (periodicHandler != null && periodicRunnable != null)
+			periodicHandler.removeCallbacks(periodicRunnable);
+		if (mWakeLock != null && mWakeLock.isHeld())
+			mWakeLock.release();
+		ioDetection.stop();
 	}
 }

@@ -1,40 +1,28 @@
 package it.unipi.dii.ntc;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Environment;
-import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
-import com.opencsv.CSVWriter;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Set;
+import it.unipi.dii.iodetectionlib.IODetection;
 
 public class BroadcastRSSIReceiver extends BroadcastReceiver
 {
 
 	private static final String TAG = MainActivity.class.getName();
+	private final IODetection ioDetection;
 	private RSSIScan_Service rssiService;
 	private String prefFileName = "StoredDevices";
 	private int TimeToSleep = 5000;
 
-	public BroadcastRSSIReceiver(RSSIScan_Service rssiS){
+	public BroadcastRSSIReceiver(RSSIScan_Service rssiS, IODetection ioDetection){
 		rssiService = rssiS;
+		this.ioDetection = ioDetection;
 	}
 	@SuppressLint("SetTextI18n")
 	@Override
@@ -69,6 +57,11 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 				Log.i(TAG, "onReceive: Trovato dispositivo " + RSSIValue);
 				Log.i(TAG, "onReceive: Trovato dispositivo " + device.getName());
 				Log.i(TAG, "onReceive: Trovato dispositivo " + deviceHardwareAddress);
+				if(ioDetection.get()){
+					Log.i(TAG, "onReceive: INDOOR");
+				}else{
+					Log.i(TAG, "onReceive: OUTDOOR");
+				}
 				f = Math.pow(10, (double) (-69 - RSSIValue)/(10*5));
 				Log.i(TAG, "Distance Estimation"+ f);
 				rssiService.createNotification(device.getName() + " UNKNOWN DEVICE!!!");
@@ -85,34 +78,5 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 
 		}
 	}
-
-	public void writeInCSV(String deviceMAC, int RSSI, Context c) throws IOException
-	{
-		CSVWriter writer;
-		File outputFile = new File(c.getFilesDir() + File.separator + "collected-data.csv");
-		if (!outputFile.exists()) {
-
-			try {
-				writer = new CSVWriter(new FileWriter(outputFile, true),
-					',', '"', '\\', "\n");
-				writer.writeNext(
-					new String[]{"MAC", "RSSI"},
-					false);
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				return;
-			}
-		}
-		writer = new CSVWriter(new FileWriter(outputFile, true),
-			',', '"', '\\', "\n");
-		writer.writeNext(
-			new String[]{deviceMAC,String.valueOf(RSSI)},
-			true);
-		writer.close();
-
-
-	}
-
 
 }
