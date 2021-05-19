@@ -1,20 +1,30 @@
 package it.unipi.dii.ntc;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import com.google.android.material.button.MaterialButton;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -29,10 +39,14 @@ public class MainActivity extends AppCompatActivity
 
 	private static final String TAG = MainActivity.class.getName();
 	private static final int REQUEST_ENABLE_BT = 1234;
+	private RSSIScan_Service scanningService;
+	private Intent intentRSSIScan;
 
-	private Intent monitoringIntent;
+	private final double[] distances = {0.5, 1, 1.5, 2};
 
-	private boolean serviceRunning = false;
+
+	private boolean serviceMonitoringRunning = false;
+	private boolean serviceLoggingRunning = false;
 
 	@RequiresApi(api = Build.VERSION_CODES.M)
 	@Override
@@ -42,11 +56,38 @@ public class MainActivity extends AppCompatActivity
 		setContentView(R.layout.activity_main);
 
 		// Check if the detecton service is enabled
-		serviceRunning = isServiceRunning();
-		Log.i("INFO", "THE SERVICE IS RUNNINIG" + serviceRunning);
-		setScanningButtonValue();
+		serviceMonitoringRunning = isServiceRunning();
+		Log.i("INFO", "THE SERVICE IS RUNNINIG" + serviceMonitoringRunning);
 
+		intentRSSIScan = new Intent(MainActivity.this, RSSIScan_Service.class);
+		if (!bindService(intentRSSIScan, serviceConnection,BIND_AUTO_CREATE)) {
+			Log.e(TAG, "Can not bind service.");
+			return;
+		}
+		setScanningButtonValue();
 	}
+
+	private final ServiceConnection serviceConnection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service)
+		{
+			Log.i(TAG, "connection called");
+			scanningService = ((RSSIScan_Service.ServiceBinder)service).getService();
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name)
+		{
+			scanningService = null;
+		}
+
+		@Override
+		public void onBindingDied(ComponentName name)
+		{
+			scanningService = null;
+		}
+	};
+
 
 
 	/**
@@ -107,36 +148,41 @@ public class MainActivity extends AppCompatActivity
 	@RequiresApi(api = Build.VERSION_CODES.O)
 	public void startMonitoring(View vApp){
 
-
-		if(serviceRunning == false) {
+		Log.e(TAG, "startMonitoring: called");
+		if(serviceMonitoringRunning == false) {
 			/* ACTIVATE BLUETOOTH */
-			BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
+			//BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 			//Check if bluetooth is supported
-			if (bluetoothAdapter == null)
-				Log.e(TAG, "startMonitoring: Device doesn't support bluetooth.");
+			//if (bluetoothAdapter == null)
+			//	Log.e(TAG, "startMonitoring: Device doesn't support bluetooth.");
 
 				//Check if bluetooth is enabled
 				//TODO: Wait untill bluetooth is activated
-			else if (!bluetoothAdapter.isEnabled()) {
-				Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-				startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-			}
+			//else if (!bluetoothAdapter.isEnabled()) {
+			//	Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			//	startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+			//}
 			checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_LOCATION_STATE_PERMISSION_CODE);
-			if (!bluetoothAdapter.isDiscovering()) {
-				Log.i(TAG, "onCreate: isDiscovering " + bluetoothAdapter.startDiscovery());
-			}
+			//if (!bluetoothAdapter.isDiscovering()) {
+			//	Log.i(TAG, "onCreate: isDiscovering " + bluetoothAdapter.startDiscovery());
+			//}
 
 
-			Intent intentRSSIScan = new Intent(MainActivity.this, RSSIScan_Service.class);
-			startForegroundService(intentRSSIScan);
+			//Intent intentRSSIScan = new Intent(MainActivity.this, RSSIScan_Service.class);
+			//startForegroundService(intentRSSIScan);
+			//getApplicationContext().startService(intentRSSIScan);
+			scanningService.startPeriodicScan();
+			scanningService.startRSSIMonitoring();
 		}
 		else{
-			getApplicationContext().stopService(new Intent(MainActivity.this, RSSIScan_Service.class));
+			//getApplicationContext().stopService(intentRSSIScan);
+			scanningService.stopPeriodicScan();
+			scanningService.stopRSSIMonitoring();
+			//getApplicationContext().stopService(intentRSSIScan);
 			//getApplicationContext().stopService(Intent(this, RSSIScan_Service::class.java));
 		}
 
-		serviceRunning = !serviceRunning;
+		serviceMonitoringRunning = !serviceMonitoringRunning;
 		setScanningButtonValue();
 	}
 
@@ -153,11 +199,55 @@ public class MainActivity extends AppCompatActivity
 	public void setScanningButtonValue()
 	{
 		Button monitoringButton;
-		monitoringButton = (Button) findViewById(R.id.monitoringButton);
-		if (serviceRunning == true) {
+		monitoringButton = findViewById(R.id.monitoringButton);
+		if (serviceMonitoringRunning == true) {
 			monitoringButton.setText("STOP MONITORING");
 		} else {
 			monitoringButton.setText("START MONITORING");
 		}
+
+		monitoringButton = findViewById(R.id.rssilogger);
+		if (serviceLoggingRunning == true) {
+			monitoringButton.setText("STOP Log");
+		} else {
+			monitoringButton.setText("START Log");
+		}
+
+	}
+
+	/**
+	 * This methods takes the value of the seekbar
+	 * Starts recording the samples
+	 * @param vApp
+	 */
+	public void startRSSILogging(View vApp){
+		if(serviceLoggingRunning == false) {
+			SeekBar seekBarInfo = findViewById(R.id.prograssionBar);
+			int accessIndex = seekBarInfo.getProgress();
+			Log.i(TAG, "INDEX " + accessIndex);
+			Log.i(TAG, "DISTANCE TO MEASURE " + distances[accessIndex]);
+			//startService(intentRSSIScan);
+			scanningService.startPeriodicScan();
+			scanningService.startRSSILogging(distances[accessIndex]);
+		}
+		else{
+			//stopService(intentRSSIScan);
+			Log.i(TAG, "STOPPING LOGGING SERVICE ");
+			scanningService.stopPeriodicScan();
+			scanningService.stopRSSILogging();
+		}
+		serviceLoggingRunning = !serviceLoggingRunning;
+		setScanningButtonValue();
+	}
+
+	@Override
+	public void onDestroy()
+	{
+		Log.i(TAG, "Destroying and unbouning service");
+		super.onDestroy();
+
+		stopService(intentRSSIScan);
+		unbindService(serviceConnection);
+
 	}
 }

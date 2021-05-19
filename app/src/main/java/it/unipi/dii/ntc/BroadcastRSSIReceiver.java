@@ -43,7 +43,7 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 
 			//Log.i(TAG, "Distance Estimation" + (double)(-69 - RSSIValue)/(10*2));
 			// TODO: Put a dynamic Threshold instead of -45 and check if stored device
-			if (/*RSSIValue > -65 && */sharedPref.contains(" "+deviceHardwareAddress) == false) {
+			if (/*RSSIValue > -65 && */sharedPref.contains(" "+deviceHardwareAddress) == true) {
 				//if(sharedPref.contains(" "+deviceHardwareAddress) == true){
 					//rssiService.createNotification(device.getName() + " :) FRIEND" );
 				//	Log.i(TAG, "1m RSSI values monitoring");
