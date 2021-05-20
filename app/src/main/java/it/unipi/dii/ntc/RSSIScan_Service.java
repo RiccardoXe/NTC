@@ -24,7 +24,9 @@ import android.widget.TableLayout;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import it.unipi.dii.iodetectionlib.IODetection;
+import java.io.IOException;
+
+import it.unipi.dii.iodetectionlib.IODetector;
 
 public class RSSIScan_Service extends Service
 {
@@ -36,7 +38,7 @@ public class RSSIScan_Service extends Service
 	private static final long WAKELOCK_TIMEOUT = 2 * 60 * 1000;
 	private Handler periodicHandler;
 	private Runnable periodicRunnable;
-	private IODetection ioDetection;
+	private IODetector ioDetector;
 	private final IBinder binder = new ServiceBinder();
 
 
@@ -122,14 +124,18 @@ public class RSSIScan_Service extends Service
 		IntentFilter BLTIntFilter = new IntentFilter();
 		BLTIntFilter.addAction(BluetoothDevice.ACTION_FOUND);
 		BLTIntFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-		ioDetection = new IODetection(getApplicationContext());
-		RSSIReceiver = new BroadcastRSSIReceiver(this, ioDetection);
+		try {
+			ioDetector = new IODetector(getApplicationContext());
+		} catch (IOException e) {
+			return; // TODO: handle
+		}
+		RSSIReceiver = new BroadcastRSSIReceiver(this, ioDetector);
 		getApplicationContext().registerReceiver(RSSIReceiver, BLTIntFilter);
 	}
 
 	public void stopRSSIMonitoring(){
 		Log.i(TAG, "------------------ Unregister called ------------------------");
-		ioDetection.stop();
+		ioDetector.close();
 		getApplicationContext().unregisterReceiver(RSSIReceiver);
 		RSSIReceiver = null;
 	}
@@ -184,8 +190,8 @@ public class RSSIScan_Service extends Service
 			periodicHandler.removeCallbacks(periodicRunnable);
 		if (mWakeLock != null && mWakeLock.isHeld())
 			mWakeLock.release();
-		if(ioDetection != null)
-			ioDetection.stop();
+		if(ioDetector != null)
+			ioDetector.close();
 	}
 
 	@Nullable

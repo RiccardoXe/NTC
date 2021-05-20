@@ -9,20 +9,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import it.unipi.dii.iodetectionlib.IODetection;
+import it.unipi.dii.iodetectionlib.IODetector;
+import it.unipi.dii.iodetectionlib.IOStatus;
 
 public class BroadcastRSSIReceiver extends BroadcastReceiver
 {
 
 	private static final String TAG = MainActivity.class.getName();
-	private final IODetection ioDetection;
+	private final IODetector ioDetector;
 	private RSSIScan_Service rssiService;
 	private String prefFileName = "StoredDevices";
 	private int TimeToSleep = 5000;
 
-	public BroadcastRSSIReceiver(RSSIScan_Service rssiS, IODetection ioDetection){
+	public BroadcastRSSIReceiver(RSSIScan_Service rssiS, IODetector ioDetection){
 		rssiService = rssiS;
-		this.ioDetection = ioDetection;
+		this.ioDetector = ioDetection;
 	}
 	@SuppressLint("SetTextI18n")
 	@Override
@@ -57,7 +58,7 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 				Log.i(TAG, "onReceive: Trovato dispositivo " + RSSIValue);
 				Log.i(TAG, "onReceive: Trovato dispositivo " + device.getName());
 				Log.i(TAG, "onReceive: Trovato dispositivo " + deviceHardwareAddress);
-				if(ioDetection.get()){
+				if(ioDetector.detect().getIOStatus() == IOStatus.INDOOR){ // TODO: use ioDetection.registerIODetectionListener
 					Log.i(TAG, "onReceive: INDOOR");
 				}else{
 					Log.i(TAG, "onReceive: OUTDOOR");
