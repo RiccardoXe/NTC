@@ -19,10 +19,8 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.util.Log;
-import android.widget.TableLayout;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 
 import java.io.IOException;
 
@@ -44,21 +42,12 @@ public class RSSIScan_Service extends Service
 
 
 	/**
-	 * The background service should start a bluetoot scanning
-	 * to check RSSI values associated with devices
+	 * All the components to perform the bluetooth scan are initialized
 	 */
 	@Override
 	public void onCreate(){
 		Log.i("BACKGROUND", "Scanning Started");
-		createNotification("RSSI scanning started");
-
-
-		//IntentFilter BLTIntFilter = new IntentFilter();
-		//BLTIntFilter.addAction(BluetoothDevice.ACTION_FOUND);
-		//BLTIntFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-		//ioDetection = new IODetection(getApplicationContext());
-		//RSSIReceiver = new BroadcastRSSIReceiver(this, ioDetection);
-		//getApplicationContext().registerReceiver(RSSIReceiver, BLTIntFilter);
+		//createNotification("RSSI scanning started");
 
 		//Once create periodically perform a startDiscovery operation
 		periodicHandler = new Handler(Looper.getMainLooper());
@@ -77,6 +66,7 @@ public class RSSIScan_Service extends Service
 					mWakeLock.acquire(WAKELOCK_TIMEOUT);
 			}
 		};
+		//The below code can be used to schedule the periodicaly start the discovery
 		//periodicHandler.post(periodicRunnable);
 		//PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		//mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
@@ -84,13 +74,20 @@ public class RSSIScan_Service extends Service
 
 	}
 
+	/**
+	 *  Post the runnable on the periodicHandler
+	 */
 	public void startPeriodicScan(){
+		createNotification("RSSI scanning started");
 		periodicHandler.post(periodicRunnable);
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
 		mWakeLock.acquire(WAKELOCK_TIMEOUT);
 	}
 
+	/**
+	 * Remove the runnable from the periodic handler
+	 */
 	public void stopPeriodicScan(){
 		periodicHandler.removeCallbacks(periodicRunnable);
 	}
@@ -98,7 +95,8 @@ public class RSSIScan_Service extends Service
 	/**
 	 *  startRSSILogging register the RSSILogger
 	 *  	Write .csv data about the recorded RSSI values
-	 * @param distance_to_monitor
+	 * @param distance_to_monitor: Information needed to know which distance is assicated the
+	 *                           RSSI value
 	 */
 	public void startRSSILogging(double distance_to_monitor){
 		IntentFilter BLTIntFilter = new IntentFilter();
@@ -109,6 +107,9 @@ public class RSSIScan_Service extends Service
 		getApplicationContext().registerReceiver(RSSILogger, BLTIntFilter);
 	}
 
+	/**
+	 * Unregister the RSSI Logger
+	 */
 	public void stopRSSILogging(){
 		Log.i(TAG, "------------------ Unregister called ------------------------");
 		getApplicationContext().unregisterReceiver(RSSILogger);

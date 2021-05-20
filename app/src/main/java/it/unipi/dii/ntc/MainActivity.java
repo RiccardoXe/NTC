@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity
 	private boolean serviceMonitoringRunning = false;
 	private boolean serviceLoggingRunning = false;
 
+	/**
+	 * On create of the main activity also the RSSIScan_Service is created and binded
+	 * @param savedInstanceState
+	 */
 	@RequiresApi(api = Build.VERSION_CODES.M)
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -67,6 +71,9 @@ public class MainActivity extends AppCompatActivity
 		setScanningButtonValue();
 	}
 
+	/**
+	 * This is the Service connection
+	 */
 	private final ServiceConnection serviceConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service)
@@ -92,7 +99,7 @@ public class MainActivity extends AppCompatActivity
 
 	/**
 	 * Function called by pressing Button:"Add Devices"
-	 * Makes an intent to start Add_device_activity
+	 * Makes an intent to start Add_device_activity (Discover devices and add to friends)
 	 * @param vApp
 	 */
 	public void startBLTScan(View vApp)
@@ -150,42 +157,44 @@ public class MainActivity extends AppCompatActivity
 
 		Log.e(TAG, "startMonitoring: called");
 		if(serviceMonitoringRunning == false) {
-			/* ACTIVATE BLUETOOTH */
-			//BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-			//Check if bluetooth is supported
-			//if (bluetoothAdapter == null)
-			//	Log.e(TAG, "startMonitoring: Device doesn't support bluetooth.");
 
-				//Check if bluetooth is enabled
-				//TODO: Wait untill bluetooth is activated
-			//else if (!bluetoothAdapter.isEnabled()) {
-			//	Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			//	startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-			//}
+			//Check and request to enable bluetooth
+			checkBluetoothEnabled();
 			checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_LOCATION_STATE_PERMISSION_CODE);
-			//if (!bluetoothAdapter.isDiscovering()) {
-			//	Log.i(TAG, "onCreate: isDiscovering " + bluetoothAdapter.startDiscovery());
-			//}
 
-
-			//Intent intentRSSIScan = new Intent(MainActivity.this, RSSIScan_Service.class);
-			//startForegroundService(intentRSSIScan);
-			//getApplicationContext().startService(intentRSSIScan);
+			//Start creates a thread that periodically will start a bluetooth discovery
 			scanningService.startPeriodicScan();
+			//Register RSSI Broadcast Receiver
 			scanningService.startRSSIMonitoring();
 		}
 		else{
-			//getApplicationContext().stopService(intentRSSIScan);
+			//Remove the thread that periodically start the discovery
 			scanningService.stopPeriodicScan();
+			//Remove the RSSI Broadcast Receiver
 			scanningService.stopRSSIMonitoring();
-			//getApplicationContext().stopService(intentRSSIScan);
-			//getApplicationContext().stopService(Intent(this, RSSIScan_Service::class.java));
 		}
 
 		serviceMonitoringRunning = !serviceMonitoringRunning;
 		setScanningButtonValue();
 	}
 
+	public void checkBluetoothEnabled(){
+		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		//Check if bluetooth is supported
+		if (bluetoothAdapter == null)
+			Log.e(TAG, "startMonitoring: Device doesn't support bluetooth.");
+
+			//Check if bluetooth is enabled
+		else if (!bluetoothAdapter.isEnabled()) {
+			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+		}
+	}
+
+	/**
+	 * Checks if the RSSIScan_Service is Running
+	 * @return
+	 */
 	@RequiresApi(api = Build.VERSION_CODES.M)
 	private boolean isServiceRunning()
 	{
@@ -196,6 +205,9 @@ public class MainActivity extends AppCompatActivity
 		return false;
 	}
 
+	/**
+	 * This method change the text on buttons in order to
+	 */
 	public void setScanningButtonValue()
 	{
 		Button monitoringButton;

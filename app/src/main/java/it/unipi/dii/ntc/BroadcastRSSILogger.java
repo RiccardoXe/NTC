@@ -22,7 +22,6 @@ public class BroadcastRSSILogger extends BroadcastReceiver
 	private static final String TAG = MainActivity.class.getName();
 	private RSSIScan_Service rssiService;
 	private String prefFileName = "StoredDevices";
-	private int TimeToSleep = 5000;
 	private double referenceDistance;
 	private String csvFileName = "RSSILoggingFile.csv";
 
