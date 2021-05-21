@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">NTC</string>
+    <string name="progression_bar">0.5          1.0           1.5            2.0</string>
+    <string name="START_LOG">INIZIA LOG</string>
+    <string name="START_MONITORING">INIZIA MONITORAGGIO</string>
+    <string name="ADD_DEVICE">AGGIUNGI DISPOSITIVO</string>
+    <string name="image1">image</string>
+
+    <string name="DISCOVERY_STARTED">Iniziata ricerca di dispositivi! Attendi 12 secondi e poi tocca il nome del dispositivo da aggiungere a quelli riconosciuti</string>
+    <string name="DISCOVERING_DEVICES">Ricerca dispositivi in corso...</string>
+    <string name="RECOGNIZED_DEVICES">Dispositivi riconosciuti! Tocca per disaccoppiare dispositivi</string>
+    <string name="MATCHED_DEVICES">Dispositivi accoppiati</string>
+    <string name="image2">image</string>
+    <string name="image3">image</string>
+
+</resources>

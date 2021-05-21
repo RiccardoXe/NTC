@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">NTC</string>
+    <string name="progression_bar">0.5          1.0           1.5            2.0</string>
+    <string name="START_LOG">START LOG</string>
+    <string name="START_MONITORING">START MONITORING</string>
+    <string name="ADD_DEVICE">ADD DEVICE</string>
+    <string name="image1">image</string>
+
+
+    <string name="DISCOVERY_STARTED">Discoverying device started! Wait 12 seconds and then touch device name to add it to the recognized ones</string>
+    <string name="DISCOVERING_DEVICES">Discovering devices...</string>
+    <string name="RECOGNIZED_DEVICES">Recognized devices! Touch to unmatch device</string>
+    <string name="MATCHED_DEVICES">Already Matched Devices</string>
+    <string name="image2">image</string>
+    <string name="image3">image</string>
+
+
 </resources>

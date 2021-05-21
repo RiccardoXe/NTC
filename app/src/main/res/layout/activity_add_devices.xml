@@ -11,7 +11,7 @@
         android:layout_width="245dp"
         android:layout_height="35dp"
         android:layout_marginBottom="24dp"
-        android:text="Recognized devices! Touch to unmatch device"
+        android:text="@string/RECOGNIZED_DEVICES"
         app:layout_constraintBottom_toTopOf="@+id/BLTFriends"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Discovering Devices..." />
+                android:text="@string/DISCOVERING_DEVICES" />
         </TableRow>
     </TableLayout>
 
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Already Metched Devices" />
+                android:text="@string/MATCHED_DEVICES" />
         </TableRow>
     </TableLayout>
 
@@ -71,6 +71,7 @@
         android:layout_width="47dp"
         android:layout_height="57dp"
         android:layout_marginBottom="10dp"
+        android:contentDescription="@string/image2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.098"
@@ -83,7 +84,7 @@
         android:id="@+id/textView2"
         android:layout_width="248dp"
         android:layout_height="66dp"
-        android:text="Discoverying device started! Wait 12seconds and then touch device name to add it to the recognized ones"
+        android:text="@string/DISCOVERY_STARTED"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.542"
@@ -96,6 +97,7 @@
         android:layout_width="90dp"
         android:layout_height="68dp"
         android:layout_marginBottom="8dp"
+        android:contentDescription="@string/image3"
         app:layout_constraintBottom_toTopOf="@+id/BLTFriends"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
