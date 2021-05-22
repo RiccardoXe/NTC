@@ -2,7 +2,9 @@
     <string name="app_name">NTC</string>
     <string name="progression_bar">0.5          1.0           1.5            2.0</string>
     <string name="START_LOG">INIZIA LOG</string>
+    <string name="STOP_LOG">FERMA LOG</string>
     <string name="START_MONITORING">INIZIA MONITORAGGIO</string>
+    <string name="STOP_MONITORING">FERMA MONITORAGGIO</string>
     <string name="ADD_DEVICE">AGGIUNGI DISPOSITIVO</string>
     <string name="image1">image</string>
 

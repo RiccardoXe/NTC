@@ -213,16 +213,16 @@ public class MainActivity extends AppCompatActivity
 		Button monitoringButton;
 		monitoringButton = findViewById(R.id.monitoringButton);
 		if (serviceMonitoringRunning == true) {
-			monitoringButton.setText("STOP MONITORING");
+			monitoringButton.setText(R.string.STOP_MONITORING);
 		} else {
-			monitoringButton.setText("START MONITORING");
+			monitoringButton.setText(R.string.START_MONITORING);
 		}
 
 		monitoringButton = findViewById(R.id.rssilogger);
 		if (serviceLoggingRunning == true) {
-			monitoringButton.setText("STOP Log");
+			monitoringButton.setText(R.string.STOP_LOG);
 		} else {
-			monitoringButton.setText("START Log");
+			monitoringButton.setText(R.string.START_LOG);
 		}
 
 	}
