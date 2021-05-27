@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -38,7 +39,7 @@ public class RSSIScan_Service extends Service
 	private Runnable periodicRunnable;
 	private IODetector ioDetector;
 	private final IBinder binder = new ServiceBinder();
-
+	private CalibrationRSSIReceiver calibrationRSSIReceiver;
 
 
 	/**
@@ -104,7 +105,7 @@ public class RSSIScan_Service extends Service
 		BLTIntFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		getApplicationContext().registerReceiver(RSSILogger, BLTIntFilter);
 		RSSILogger = new BroadcastRSSILogger(this, distance_to_monitor);
-		getApplicationContext().registerReceiver(RSSILogger, BLTIntFilter);
+	//	getApplicationContext().registerReceiver(RSSILogger, BLTIntFilter);
 	}
 
 	/**
@@ -141,7 +142,22 @@ public class RSSIScan_Service extends Service
 		RSSIReceiver = null;
 	}
 
+	public void startCalibration(String calibrationTargetKey){
+		Log.i(TAG, "@@@@@@onReceive: Trovato dispositivo " + calibrationTargetKey);
 
+		IntentFilter BLTIntFilter = new IntentFilter();
+		BLTIntFilter.addAction(BluetoothDevice.ACTION_FOUND);
+		BLTIntFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+		getApplicationContext().registerReceiver(calibrationRSSIReceiver, BLTIntFilter);
+		calibrationRSSIReceiver = new CalibrationRSSIReceiver(this, calibrationTargetKey);
+		getApplicationContext().registerReceiver(calibrationRSSIReceiver, BLTIntFilter);
+	}
+
+	public void stopCalibration(){
+		Log.i(TAG, "------------------ Unregister called ------------------------");
+		getApplicationContext().unregisterReceiver(calibrationRSSIReceiver);
+		calibrationRSSIReceiver = null;
+	}
 
 	public void createNotification(String NotifyToSend)
 	{

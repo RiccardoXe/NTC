@@ -16,5 +16,9 @@
     <string name="image2">image</string>
     <string name="image3">image</string>
 
+    <string name="START_CALIBRATION">START CALIBRATION</string>
+    <string name="NO_DEVICE_SELECTED">No device has been selected yet.</string>
+    <string name="START_CALIBRATION_INSTRUCTIONS">Wait for bluetooth discovery, then select a device and place the devices at 1 meter distance and click on the below button to start the calibration.</string>
+    <string name="WAIT_FOR_CALIBRATION">Wait a minute for the calibration completition...</string>
 
 </resources>

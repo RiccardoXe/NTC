@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
 
 	private static final String TAG = MainActivity.class.getName();
 	private static final int REQUEST_ENABLE_BT = 1234;
-	private RSSIScan_Service scanningService;
+	public static RSSIScan_Service scanningService;
 	private Intent intentRSSIScan;
 
 	private final double[] distances = {0.5, 1, 1.5, 2};
@@ -96,6 +96,24 @@ public class MainActivity extends AppCompatActivity
 	};
 
 
+	/**
+	 * Function called by pressing Button:"CALIBRATION"
+	 * Makes an intent to start Calibration_Activity
+	 * @param vApp
+	 */
+	public void startCalibrationActivity(View vApp)
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+			checkPermission(Manifest.permission.ACTIVITY_RECOGNITION, ACTIVITY_RECOGNITION_PERMISSION_CODE);
+		checkPermission(Manifest.permission.ACCESS_FINE_LOCATION,
+			ACCESS_FINE_LOCATION_STATE_PERMISSION_CODE);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+			checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+				ACCESS_BACKGROUND_LOCATION_PERMISSION_CODE);
+
+		Intent myIntent = new Intent(MainActivity.this, Calibration_Activity.class);
+		MainActivity.this.startActivity(myIntent);
+	}
 
 	/**
 	 * Function called by pressing Button:"Add Devices"
