@@ -28,11 +28,25 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 	private RSSIScan_Service rssiService;
 	private String prefFileName = "StoredDevices";
 	private String calibrationFileName = "CalibrationFile.csv";
+	private Double outdoorThreshold;
+	private Double indoorThreshold;
+	private Context context;
 
 
-	public BroadcastRSSIReceiver(RSSIScan_Service rssiS, IODetector ioDetection){
+	public BroadcastRSSIReceiver(RSSIScan_Service rssiS, IODetector ioDetection, Context context){
 		rssiService = rssiS;
 		this.ioDetector = ioDetection;
+		this.context = context;
+		try {
+			this.outdoorThreshold = getMeanRSSI(false, context);
+			this.indoorThreshold = getMeanRSSI(true, context);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Log.i(TAG, "BroadcastRSSIReceiver: outdoorThreshold " + outdoorThreshold);
+		Log.i(TAG, "BroadcastRSSIReceiver: indoorThreshold " + indoorThreshold);
 	}
 
 	@SuppressLint("SetTextI18n")
@@ -52,34 +66,25 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 
 			IOStatus ioStatus = ioDetector.detect().getIOStatus();
 			//check if we are indoor or outdoor
-			Double meanRSSI = 0.0;
+			Double meanRSSI;
 			if( ioStatus == IOStatus.INDOOR){ // TODO: use ioDetection.registerIODetectionListener
 				Log.i(TAG, "onReceive: INDOOR");
-				try {
-					meanRSSI = getMeanRSSI(true, context);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				meanRSSI = indoorThreshold;
 
 			}else{
 				Log.i(TAG, "onReceive: OUTDOOR");
-				try {
-					meanRSSI = getMeanRSSI(false, context);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				meanRSSI = outdoorThreshold;
 
 			}
 
 			// TODO: Put a dynamic Threshold instead of -45 and check if stored device
-			if (RSSIValue > -65 && sharedPref.contains(" "+deviceHardwareAddress) == false) {
+			if (RSSIValue > -meanRSSI && (sharedPref.contains(" "+deviceHardwareAddress) == false)) {
 				Log.i(TAG, "onReceive: Trovato dispositivo " + RSSIValue);
 				Log.i(TAG, "onReceive: Trovato dispositivo " + device.getName());
 				Log.i(TAG, "onReceive: Trovato dispositivo " + deviceHardwareAddress);
 
-				f = Math.pow(10, (double) (-meanRSSI - RSSIValue)/(10*5));
-				Log.i(TAG, "Distance Estimation"+ f);
+		//		f = Math.pow(10, (double) (-meanRSSI - RSSIValue)/(10*5));
+		//		Log.i(TAG, "Distance Estimation"+ f);
 				rssiService.createNotification(device.getName() + " UNKNOWN DEVICE!!!");
 			}
 		}

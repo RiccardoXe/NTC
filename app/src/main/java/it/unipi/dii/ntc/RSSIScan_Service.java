@@ -131,8 +131,9 @@ public class RSSIScan_Service extends Service
 		} catch (IOException e) {
 			return; // TODO: handle
 		}
-		RSSIReceiver = new BroadcastRSSIReceiver(this, ioDetector);
+		RSSIReceiver = new BroadcastRSSIReceiver(this, ioDetector, getApplicationContext());
 		getApplicationContext().registerReceiver(RSSIReceiver, BLTIntFilter);
+
 	}
 
 	public void stopRSSIMonitoring(){
@@ -142,14 +143,14 @@ public class RSSIScan_Service extends Service
 		RSSIReceiver = null;
 	}
 
-	public void startCalibration(String calibrationTargetKey){
+	public void startCalibration(String calibrationTargetKey, Boolean indoor){
 		Log.i(TAG, "@@@@@@onReceive: Trovato dispositivo " + calibrationTargetKey);
 
 		IntentFilter BLTIntFilter = new IntentFilter();
 		BLTIntFilter.addAction(BluetoothDevice.ACTION_FOUND);
 		BLTIntFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		getApplicationContext().registerReceiver(calibrationRSSIReceiver, BLTIntFilter);
-		calibrationRSSIReceiver = new CalibrationRSSIReceiver(this, calibrationTargetKey);
+		calibrationRSSIReceiver = new CalibrationRSSIReceiver(this, calibrationTargetKey, indoor);
 		getApplicationContext().registerReceiver(calibrationRSSIReceiver, BLTIntFilter);
 	}
 

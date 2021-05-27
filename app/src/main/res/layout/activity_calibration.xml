@@ -17,6 +17,14 @@
 
 
 
+
+
+
+
+
+
+
+
     ]]>
 
     <Button
@@ -27,34 +35,9 @@
         android:text="@string/START_CALIBRATION"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.431"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.549" />
-
-    <TableLayout
-        android:id="@+id/BLTDevices"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13">
-
-        <TableRow
-            android:background="#0079D6"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/DISCOVERING_DEVICES" />
-        </TableRow>
-    </TableLayout>
+        app:layout_constraintVertical_bias="0.679" />
 
     <TableLayout
         android:id="@+id/BLTFriends"
@@ -70,28 +53,133 @@
 
     </TableLayout>
 
+
     <TextView
         android:id="@+id/calibrationInstructionsTextView"
-        android:layout_width="295dp"
-        android:layout_height="85dp"
+        android:layout_width="309dp"
+        android:layout_height="64dp"
+        android:background="#57EFF4"
         android:text="@string/START_CALIBRATION_INSTRUCTIONS"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.398"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.239" />
+        app:layout_constraintTop_toBottomOf="@+id/calibrationInstructionsHeader"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/calibrationTargetDevice"
-        android:layout_width="294dp"
-        android:layout_height="62dp"
-        android:text="No selected device..."
+        android:id="@+id/calibrationInstructionsHeader"
+        android:layout_width="309dp"
+        android:layout_height="30dp"
+        android:background="#57EFF4"
+        android:text="INSTRUCTIONS"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
+
+    <TextView
+        android:id="@+id/targetDeviceHeader"
+        android:layout_width="296dp"
+        android:layout_height="29dp"
+        android:text="Selected device:"
+        android:textAlignment="center"
+        android:textColor="#EA1111"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.401"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.738" />
+        app:layout_constraintVertical_bias="0.811" />
+
+    <TextView
+        android:id="@+id/calibrationTargetDevice"
+        android:layout_width="296dp"
+        android:layout_height="29dp"
+        android:text="None"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/targetDeviceHeader"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <RadioGroup
+        android:id="@+id/radioEnvironment"
+        android:layout_width="104dp"
+        android:layout_height="92dp"
+        app:layout_constraintBottom_toTopOf="@+id/calibrationButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BLTDevices"
+        app:layout_constraintVertical_bias="1.0">
+
+        <RadioButton
+            android:id="@+id/radioIndoor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="INDOOR" />
+
+        <RadioButton
+            android:id="@+id/radioOutdoor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="OUTDOOR" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="384dp"
+        android:layout_height="22dp"
+        android:layout_weight="1"
+        android:background="#3F51B5"
+        android:text="Discovered devices:"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calibrationInstructionsTextView"
+        app:layout_constraintVertical_bias="0.032" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:background="#FFFFFF"
+        android:padding="5dp"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="157dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/DISCOVERING_DEVICES"
+            android:textAlignment="center"
+            tools:layout_editor_absoluteX="9dp"
+            tools:layout_editor_absoluteY="162dp" />
+
+    </TableRow>
+
+    <TableLayout
+        android:id="@+id/BLTDevices"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.223">
+
+    </TableLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

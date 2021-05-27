@@ -3,19 +3,16 @@ package it.unipi.dii.ntc;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,29 +82,7 @@ public class Calibration_Activity extends AppCompatActivity
 		calibrationButton.setEnabled(false);
 
 	}
-/*
 
-	private final ServiceConnection serviceConnection = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service)
-		{
-			Log.i(TAG, "connection called");
-			scanningService = ((RSSIScan_Service.ServiceBinder)service).getService();
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName name)
-		{
-			scanningService = null;
-		}
-
-		@Override
-		public void onBindingDied(ComponentName name)
-		{
-			scanningService = null;
-		}
-	};
-*/
 
 	public void setCalibrationButtonValue()
 	{
@@ -125,9 +100,22 @@ public class Calibration_Activity extends AppCompatActivity
 		if(serviceCalibrationRunning == false) {
 
 			Log.i(TAG, "CALIBRATION HAS STARTED" );
+
+			RadioGroup radioEnvironment = (RadioGroup) findViewById(R.id.radioEnvironment);
+			// get selected radio button from radioGroup
+			int selectedId = radioEnvironment.getCheckedRadioButtonId();
+
+			// find the radiobutton by returned id
+			RadioButton radioEnvironmentButton = (RadioButton) findViewById(selectedId);
+			String radioEnvironmentButtonText = (String) radioEnvironmentButton.getText();
+			System.out.println(radioEnvironmentButtonText);
+
+			Boolean indoor= (radioEnvironmentButtonText.equals("INDOOR"))?true:false;
 			//startService(intentRSSIScan);
 			scanningService.startPeriodicScan();
-			scanningService.startCalibration(calibrationTargetKey);
+			scanningService.startCalibration(calibrationTargetKey, indoor);
+
+
 		}
 		else{
 			//stopService(intentRSSIScan);
@@ -151,7 +139,7 @@ public class Calibration_Activity extends AppCompatActivity
 
 		calibrationTargetKey = key;
 		Log.d("Calibration target: ", key + ": " + value);
-		TextView tx = findViewById(R.id.calibrationTargetDevice);
+		TextView tx = findViewById(R.id.targetDeviceHeader);
 		String deviceName = value + "|" + key;
 
 		tx.setText(deviceName);

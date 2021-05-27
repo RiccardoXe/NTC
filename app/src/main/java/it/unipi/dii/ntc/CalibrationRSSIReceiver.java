@@ -28,11 +28,13 @@ public class CalibrationRSSIReceiver extends BroadcastReceiver
 	private String calibrationTargetKey;
 	private RSSIScan_Service rssiService;
 	private String calibrationFileName = "CalibrationFile.csv";
+	private Boolean indoor;
 
 
-	public CalibrationRSSIReceiver(RSSIScan_Service rssiS, String calibrationTargetKey){
+	public CalibrationRSSIReceiver(RSSIScan_Service rssiS, String calibrationTargetKey, Boolean indoor){
 		rssiService = rssiS;
 		this.calibrationTargetKey = calibrationTargetKey;
+		this.indoor = indoor;
 	}
 
 	@SuppressLint("SetTextI18n")
@@ -60,9 +62,10 @@ public class CalibrationRSSIReceiver extends BroadcastReceiver
 				Log.i(TAG, "onReceive CALIBRATION: RRSI VALUE " + RSSIValue);
 				Log.i(TAG, "onReceive CALIBRATION: device.getName() " + device.getName());
 				Log.i(TAG, "onReceive CALIBRATION: deviceHardwareAddress " + deviceHardwareAddress);
+				Log.i(TAG, "onReceive INDOOR: " + indoor.toString());
 
 				try {
-					updateCalibrationFile(timestampCurrent, deviceHardwareAddress, RSSIValue, true, context);
+					updateCalibrationFile(timestampCurrent, deviceHardwareAddress, RSSIValue, indoor, context);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
