@@ -139,7 +139,7 @@ public class Calibration_Activity extends AppCompatActivity
 
 		calibrationTargetKey = key;
 		Log.d("Calibration target: ", key + ": " + value);
-		TextView tx = findViewById(R.id.targetDeviceHeader);
+		TextView tx = findViewById(R.id.calibrationTargetDevice);
 		String deviceName = value + "|" + key;
 
 		tx.setText(deviceName);

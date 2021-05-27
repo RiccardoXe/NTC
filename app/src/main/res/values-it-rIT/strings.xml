@@ -15,4 +15,13 @@
     <string name="image2">image</string>
     <string name="image3">image</string>
 
+    <string name="START_CALIBRATION">INIZIA CALIBRAZIONE</string>
+    <string name="NO_DEVICE_SELECTED">Nessun dispositivo è stato selezionato.</string>
+    <string name="START_CALIBRATION_INSTRUCTIONS">ISTRUZIONI: \nAttendi la fine del bluetooth discovery, seleziona un dispositivo e poni i dispositivi ad 1 metro di distanza e clicca sul pulsante per iniziare la calibrazione.</string>
+    <string name="WAIT_FOR_CALIBRATION">Attendi un minuto per la fine della calibrazione...</string>
+    <string name="DISCOVERED_DEVICES_HEADER">Dispositivi trovati:</string>
+    <string name="INDOOR_RADIO_BUTTON">INDOOR</string>
+    <string name="OUTDOOR_RADIO_BUTTON">OUTDOOR</string>
+    <string name="NONE">Nessuno</string>
+    <string name="SELECTED_DEVICE">Dispositivo selezionato:</string>
 </resources>

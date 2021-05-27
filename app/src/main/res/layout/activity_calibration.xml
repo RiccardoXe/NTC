@@ -4,28 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"><![CDATA[
-    tools:context=".Calibration_Activity">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    ]]>
+    tools:context=".Calibration_Activity">]]>
 
     <Button
         android:id="@+id/calibrationButton"
@@ -56,35 +35,22 @@
 
     <TextView
         android:id="@+id/calibrationInstructionsTextView"
-        android:layout_width="309dp"
-        android:layout_height="64dp"
+        android:layout_width="312dp"
+        android:layout_height="80dp"
         android:background="#57EFF4"
         android:text="@string/START_CALIBRATION_INSTRUCTIONS"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calibrationInstructionsHeader"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/calibrationInstructionsHeader"
-        android:layout_width="309dp"
-        android:layout_height="30dp"
-        android:background="#57EFF4"
-        android:text="INSTRUCTIONS"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
+        app:layout_constraintVertical_bias="0.046" />
 
     <TextView
         android:id="@+id/targetDeviceHeader"
         android:layout_width="296dp"
         android:layout_height="29dp"
-        android:text="Selected device:"
+        android:text="@string/SELECTED_DEVICE"
         android:textAlignment="center"
         android:textColor="#EA1111"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,7 +64,7 @@
         android:id="@+id/calibrationTargetDevice"
         android:layout_width="296dp"
         android:layout_height="29dp"
-        android:text="None"
+        android:text="@string/NONE"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -122,13 +88,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="INDOOR" />
+            android:text="@string/INDOOR_RADIO_BUTTON" />
 
         <RadioButton
             android:id="@+id/radioOutdoor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="OUTDOOR" />
+            android:text="@string/OUTDOOR_RADIO_BUTTON" />
 
     </RadioGroup>
 
@@ -137,8 +103,7 @@
         android:layout_width="384dp"
         android:layout_height="22dp"
         android:layout_weight="1"
-        android:background="#3F51B5"
-        android:text="Discovered devices:"
+        android:text="@string/DISCOVERED_DEVICES_HEADER"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -146,25 +111,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calibrationInstructionsTextView"
         app:layout_constraintVertical_bias="0.032" />
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="59dp"
-        android:background="#FFFFFF"
-        android:padding="5dp"
-        tools:layout_editor_absoluteX="4dp"
-        tools:layout_editor_absoluteY="157dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/DISCOVERING_DEVICES"
-            android:textAlignment="center"
-            tools:layout_editor_absoluteX="9dp"
-            tools:layout_editor_absoluteY="162dp" />
-
-    </TableRow>
 
     <TableLayout
         android:id="@+id/BLTDevices"
@@ -176,9 +122,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.223">
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.029">
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:background="#FFFFFF"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/DISCOVERING_DEVICES"
+                android:textAlignment="center"
+                tools:layout_editor_absoluteX="9dp"
+                tools:layout_editor_absoluteY="162dp" />
+
+        </TableRow>
     </TableLayout>
 
 

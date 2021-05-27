@@ -18,7 +18,12 @@
 
     <string name="START_CALIBRATION">START CALIBRATION</string>
     <string name="NO_DEVICE_SELECTED">No device has been selected yet.</string>
-    <string name="START_CALIBRATION_INSTRUCTIONS">Wait for bluetooth discovery, then select a device and place the devices at 1 meter distance and click on the below button to start the calibration.</string>
+    <string name="START_CALIBRATION_INSTRUCTIONS">INSTRUCTIONS: \nWait for bluetooth discovery, then select a device and place the devices at 1 meter distance and click on the below button to start the calibration.</string>
     <string name="WAIT_FOR_CALIBRATION">Wait a minute for the calibration completition...</string>
+    <string name="DISCOVERED_DEVICES_HEADER">Discovered devices:</string>
+    <string name="INDOOR_RADIO_BUTTON">INDOOR</string>
+    <string name="OUTDOOR_RADIO_BUTTON">OUTDOOR</string>
+    <string name="NONE">None</string>
+    <string name="SELECTED_DEVICE">Selected device:</string>
 
 </resources>
