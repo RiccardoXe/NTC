@@ -26,7 +26,6 @@ public class CalibrationRSSIReceiver extends BroadcastReceiver
 
 	private static final String TAG = MainActivity.class.getName();
 	private String calibrationTargetKey;
-//	private final IODetector ioDetector;
 	private RSSIScan_Service rssiService;
 	private String calibrationFileName = "CalibrationFile.csv";
 
