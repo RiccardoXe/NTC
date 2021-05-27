@@ -3,6 +3,7 @@
     package="it.unipi.dii.ntc">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -29,6 +30,7 @@
             android:exported="true"></service>
 
         <activity android:name=".Monitoring_devices_Activity" />
+        <activity android:name=".Calibration_Activity" />
         <activity android:name=".Show_devices" />
         <activity android:name=".Add_devices_Activity" />
         <activity android:name=".MainActivity">
