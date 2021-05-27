@@ -22,11 +22,19 @@ public class BroadcastBLTReceiver extends BroadcastReceiver
 	private final HashMap<String, String> discoveredBLT = new HashMap<>();
 	private final TableLayout BLTTable;
 	private final Add_devices_Activity aDevices;
+	private final Calibration_Activity cDevices;
 
 	public BroadcastBLTReceiver(TableLayout BLTTable, Add_devices_Activity a)
 	{
 		this.BLTTable = BLTTable;
 		aDevices = a;
+		cDevices = null;
+	}
+	public BroadcastBLTReceiver(TableLayout BLTTable, Calibration_Activity a)
+	{
+		this.BLTTable = BLTTable;
+		cDevices = a;
+		aDevices = null;
 	}
 
 	@SuppressLint("SetTextI18n")
@@ -73,8 +81,17 @@ public class BroadcastBLTReceiver extends BroadcastReceiver
 						//MacName[0] contains the Name of the device
 						//MacName[1] contains the MAC of the device
 						//These data are stored in the shared key-value db
-						aDevices.addElementToShared(MacName[1],MacName[0]);
-						aDevices.fillTableMatchedDevices();
+						if(cDevices == null){
+							aDevices.addElementToShared(MacName[1],MacName[0]);
+							aDevices.fillTableMatchedDevices();
+						}
+						else{
+							MacName[1]=MacName[1].replaceAll("\\s+","");
+							MacName[0]=MacName[0].replaceAll("\\s+","");
+							cDevices.addDeviceToCalibrationTarget(MacName[1],MacName[0]);
+						}
+
+
 
 					}
 				});

@@ -31,6 +31,7 @@ public class BroadcastRSSILogger extends BroadcastReceiver
 
 	}
 
+
 	@SuppressLint("SetTextI18n")
 	@Override
 	public void onReceive(Context context, Intent intent)
