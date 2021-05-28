@@ -59,15 +59,18 @@ public class MainActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// Check if the detecton service is enabled
+		// Check if the detection service is enabled
 		serviceMonitoringRunning = isServiceRunning();
 		Log.i("INFO", "THE SERVICE IS RUNNINIG" + serviceMonitoringRunning);
 
 		intentRSSIScan = new Intent(MainActivity.this, RSSIScan_Service.class);
+
+		//bind the service to the main activity
 		if (!bindService(intentRSSIScan, serviceConnection,BIND_AUTO_CREATE)) {
 			Log.e(TAG, "Can not bind service.");
 			return;
 		}
+
 		setScanningButtonValue();
 	}
 
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity
 			scanningService = ((RSSIScan_Service.ServiceBinder)service).getService();
 		}
 
+		@RequiresApi(api = Build.VERSION_CODES.O)
 		@Override
 		public void onServiceDisconnected(ComponentName name)
 		{
@@ -276,8 +280,8 @@ public class MainActivity extends AppCompatActivity
 		Log.i(TAG, "Destroying and unbouning service");
 		super.onDestroy();
 
-		stopService(intentRSSIScan);
-		unbindService(serviceConnection);
+		//stopService(intentRSSIScan);
+		//unbindService(serviceConnection);
 
 	}
 }

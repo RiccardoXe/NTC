@@ -17,8 +17,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import it.unipi.dii.iodetectionlib.IODetectionListener;
+import it.unipi.dii.iodetectionlib.IODetectionResult;
 import it.unipi.dii.iodetectionlib.IODetector;
 import it.unipi.dii.iodetectionlib.IOStatus;
+
 
 public class BroadcastRSSIReceiver extends BroadcastReceiver
 {
@@ -31,7 +34,7 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 	private Double outdoorThreshold;
 	private Double indoorThreshold;
 	private Context context;
-
+	private IOListener listener;
 
 	public BroadcastRSSIReceiver(RSSIScan_Service rssiS, IODetector ioDetection, Context context){
 		rssiService = rssiS;
@@ -45,6 +48,8 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 			e.printStackTrace();
 		}
 
+		listener = new IOListener();
+		this.ioDetector.registerIODetectionListener(listener, 1000);
 		Log.i(TAG, "BroadcastRSSIReceiver: outdoorThreshold " + outdoorThreshold);
 		Log.i(TAG, "BroadcastRSSIReceiver: indoorThreshold " + indoorThreshold);
 	}
@@ -64,7 +69,8 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 			String deviceHardwareAddress = device.getAddress(); // MAC address
 			int RSSIValue =  intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
 
-			IOStatus ioStatus = ioDetector.detect().getIOStatus();
+			IOStatus ioStatus = listener.getStatus();
+			//IOStatus ioStatus = ioDetector.detect().getIOStatus();
 			//check if we are indoor or outdoor
 			Double meanRSSI;
 			if( ioStatus == IOStatus.INDOOR){ // TODO: use ioDetection.registerIODetectionListener
@@ -73,7 +79,9 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 
 			}else{
 				Log.i(TAG, "onReceive: OUTDOOR");
-				meanRSSI = outdoorThreshold;
+				// TODO:meanRSSi
+				//meanRSSI = outdoorThreshold;
+				meanRSSI = indoorThreshold;
 
 			}
 
@@ -117,6 +125,22 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 		Double RSSIMean = Double.parseDouble(csvBody.get(i)[3]);
 		return RSSIMean;
 
+	}
+
+	private class IOListener implements IODetectionListener
+	{
+		private IOStatus status;
+
+		public IOStatus getStatus()
+		{
+			return status;
+		}
+
+		@Override
+		public void onDetectionChange(IODetectionResult ioDetectionResult)
+		{
+			status = ioDetectionResult.getIOStatus();
+		}
 	}
 
 }

@@ -1,6 +1,5 @@
 package it.unipi.dii.ntc;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,7 +7,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -33,7 +31,7 @@ public class RSSIScan_Service extends Service
 	private static final String TAG = RSSIScan_Service.class.getName();
 	private BroadcastRSSIReceiver RSSIReceiver;
 	private BroadcastRSSILogger RSSILogger;
-	private static final long PERIODIC_DELAY = 20000;
+	private static final long PERIODIC_DELAY = 10000;
 	private PowerManager.WakeLock mWakeLock;
 	private static final long WAKELOCK_TIMEOUT = 2 * 60 * 1000;
 	private Handler periodicHandler;
@@ -41,7 +39,18 @@ public class RSSIScan_Service extends Service
 	private IODetector ioDetector;
 	private final IBinder binder = new ServiceBinder();
 	private CalibrationRSSIReceiver calibrationRSSIReceiver;
+	private boolean RSSIReceiverStarted = false;
+	private boolean RSSILoggerStarted = false;
 
+	public boolean isRSSIReceiverStarted()
+	{
+		return RSSIReceiverStarted;
+	}
+
+	public boolean isRSSILoggerStarted()
+	{
+		return RSSILoggerStarted;
+	}
 
 	/**
 	 * All the components to perform the bluetooth scan are initialized
@@ -76,6 +85,8 @@ public class RSSIScan_Service extends Service
 
 	}
 
+	/* ****************************** SCANNING SERVICE ************************************** */
+
 	/**
 	 *  Post the runnable on the periodicHandler
 	 */
@@ -85,6 +96,7 @@ public class RSSIScan_Service extends Service
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
 		mWakeLock.acquire(WAKELOCK_TIMEOUT);
+		RSSIReceiverStarted = true;
 	}
 
 	/**
@@ -92,8 +104,13 @@ public class RSSIScan_Service extends Service
 	 */
 	public void stopPeriodicScan(){
 		periodicHandler.removeCallbacks(periodicRunnable);
+		RSSIReceiverStarted = false;
 	}
 
+
+	/* **************************** END OF SCANNING SERVICE ********************************* */
+
+	/* **************************** LOGGING SERVICE  ***************************************  */
 	/**
 	 *  startRSSILogging register the RSSILogger
 	 *  	Write .csv data about the recorded RSSI values
@@ -104,9 +121,10 @@ public class RSSIScan_Service extends Service
 		IntentFilter BLTIntFilter = new IntentFilter();
 		BLTIntFilter.addAction(BluetoothDevice.ACTION_FOUND);
 		BLTIntFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-		getApplicationContext().registerReceiver(RSSILogger, BLTIntFilter);
+		//getApplicationContext().registerReceiver(RSSILogger, BLTIntFilter);
 		RSSILogger = new BroadcastRSSILogger(this, distance_to_monitor);
-	//	getApplicationContext().registerReceiver(RSSILogger, BLTIntFilter);
+		getApplicationContext().registerReceiver(RSSILogger, BLTIntFilter);
+		RSSILoggerStarted = true;
 	}
 
 	/**
@@ -116,7 +134,10 @@ public class RSSIScan_Service extends Service
 		Log.i(TAG, "------------------ Unregister called ------------------------");
 		getApplicationContext().unregisterReceiver(RSSILogger);
 		RSSILogger = null;
+		RSSILoggerStarted = false;
 	}
+
+	/* **************************** END LOGGING SERVICE  *********************************  */
 
 	/**
 	 *  startRSSIMonitoring register the RSSIReciver

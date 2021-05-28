@@ -23,7 +23,7 @@ public class BroadcastRSSILogger extends BroadcastReceiver
 	private RSSIScan_Service rssiService;
 	private String prefFileName = "StoredDevices";
 	private double referenceDistance;
-	private String csvFileName = "RSSILoggingFile.csv";
+	private String csvFileName = "IndoorTestRSSILoggingFile.csv";
 
 	public BroadcastRSSILogger(RSSIScan_Service rssiS, double refDist){
 		rssiService = rssiS;
