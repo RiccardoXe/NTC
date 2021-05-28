@@ -12,6 +12,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Binder;
 import android.os.Build;
@@ -188,7 +189,9 @@ public class RSSIScan_Service extends Service
 		builder.setContentTitle("NTC-Not Too Close");
 		builder.setContentText(NotifyToSend);
 		builder.setContentIntent(pendingIntent);
-		builder.setSmallIcon(R.mipmap.ic_launcher);
+		builder.setSmallIcon(R.mipmap.ntc_icon);
+		builder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
+			R.mipmap.ntc_icon));
 		builder.setPriority(Notification.PRIORITY_HIGH);
 
 		startForeground(1, builder.build());

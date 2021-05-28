@@ -78,14 +78,19 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 			}
 
 			// TODO: Put a dynamic Threshold instead of -45 and check if stored device
-			if (RSSIValue > -meanRSSI && (sharedPref.contains(" "+deviceHardwareAddress) == false)) {
+			if (RSSIValue > meanRSSI && (sharedPref.contains(" "+deviceHardwareAddress) == false)) {
 				Log.i(TAG, "onReceive: Trovato dispositivo " + RSSIValue);
 				Log.i(TAG, "onReceive: Trovato dispositivo " + device.getName());
 				Log.i(TAG, "onReceive: Trovato dispositivo " + deviceHardwareAddress);
 
 		//		f = Math.pow(10, (double) (-meanRSSI - RSSIValue)/(10*5));
 		//		Log.i(TAG, "Distance Estimation"+ f);
-				rssiService.createNotification(device.getName() + " UNKNOWN DEVICE!!!");
+				String notifyToSend = "";
+				if( device.getName() != null){
+					notifyToSend += device.getName() + " ";
+				}
+				notifyToSend += "Unknown device too close";
+				rssiService.createNotification(notifyToSend);
 			}
 		}
 		else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){

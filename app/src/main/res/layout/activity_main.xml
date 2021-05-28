@@ -5,92 +5,101 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="214dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/progression_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.172"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/monitoringButton"
-        android:layout_width="237dp"
-        android:layout_height="103dp"
-        android:onClick="startMonitoring"
-        android:text="@string/START_MONITORING"
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.589" />
+        app:layout_constraintVertical_bias="0.0">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="237dp"
-        android:layout_height="103dp"
-        android:onClick="startBLTScan"
-        android:text="@string/ADD_DEVICE"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.772" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="237dp"
-        android:layout_height="103dp"
-        android:onClick="startCalibrationActivity"
-        android:text="CALIBRATION"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.955" />
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/progression_bar"
+                android:textAlignment="center"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toTopOf="@+id/prograssionBar"
+                app:layout_constraintEnd_toStartOf="@+id/rssilogger"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="225dp"
-        android:layout_height="249dp"
-        android:contentDescription="@string/image1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.467"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.213"
-        app:srcCompat="@drawable/distance" />
+            <Button
+                android:id="@+id/monitoringButton"
+                android:layout_width="237dp"
+                android:layout_height="103dp"
+                android:layout_marginTop="8dp"
+                android:onClick="startMonitoring"
+                android:text="@string/START_MONITORING"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
-    <Button
-        android:id="@+id/rssilogger"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="startRSSILogging"
-        android:text="@string/START_LOG"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.949"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.036" />
+            <Button
+                android:id="@+id/button"
+                android:layout_width="237dp"
+                android:layout_height="103dp"
+                android:onClick="startBLTScan"
+                android:text="@string/ADD_DEVICE"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/monitoringButton" />
 
-    <SeekBar
-        android:id="@+id/prograssionBar"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="206dp"
-        android:layout_height="70dp"
-        android:max="3"
-        android:progress="0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/rssilogger"
-        app:layout_constraintHorizontal_bias="0.384"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.024" />
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="237dp"
+                android:layout_height="103dp"
+                android:onClick="startCalibrationActivity"
+                android:text="CALIBRATION"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="225dp"
+                android:layout_height="249dp"
+                android:layout_marginTop="4dp"
+                android:contentDescription="@string/image1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/prograssionBar"
+                app:srcCompat="@drawable/distance" />
+
+            <Button
+                android:id="@+id/rssilogger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="startRSSILogging"
+                android:text="@string/START_LOG"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.949"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.036" />
+
+            <SeekBar
+                android:id="@+id/prograssionBar"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="200dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="24dp"
+                android:max="3"
+                android:progress="0"
+                app:layout_constraintEnd_toStartOf="@+id/rssilogger"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
