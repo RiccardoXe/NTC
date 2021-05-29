@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity
 
 	private static final String TAG = MainActivity.class.getName();
 	private static final int REQUEST_ENABLE_BT = 1234;
+	//From this is possible to call the Service methods
 	public static RSSIScan_Service scanningService;
 	private Intent intentRSSIScan;
 
@@ -280,8 +281,8 @@ public class MainActivity extends AppCompatActivity
 		Log.i(TAG, "Destroying and unbouning service");
 		super.onDestroy();
 
-		//stopService(intentRSSIScan);
-		//unbindService(serviceConnection);
+		stopService(intentRSSIScan);
+		unbindService(serviceConnection);
 
 	}
 }

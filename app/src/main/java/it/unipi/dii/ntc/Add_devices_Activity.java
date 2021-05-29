@@ -45,8 +45,7 @@ public class Add_devices_Activity extends AppCompatActivity
 		if (bluetoothAdapter == null)
 			Log.e(TAG, "startMonitoring: Device doesn't support bluetooth.");
 
-		//Check if bluetooth is enabled
-		//TODO: Wait untill bluetooth is activated
+		//Check if bluetooth is enabled or else request to activate it
 		else if (!bluetoothAdapter.isEnabled()) {
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);

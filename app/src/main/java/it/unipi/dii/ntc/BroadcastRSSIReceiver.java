@@ -58,7 +58,7 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		double f;
+		//double f;
 		String action = intent.getAction();
 		SharedPreferences sharedPref = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
 		//Device Discovery phase

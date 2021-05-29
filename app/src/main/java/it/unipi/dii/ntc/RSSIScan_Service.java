@@ -57,10 +57,9 @@ public class RSSIScan_Service extends Service
 	 */
 	@Override
 	public void onCreate(){
-		Log.i("BACKGROUND", "Scanning Started");
-		//createNotification("RSSI scanning started");
+		Log.i(TAG, "Scanning Started");
 
-		//Once create periodically perform a startDiscovery operation
+		//Once create sets all the information needed to perform a startDiscovery operation
 		periodicHandler = new Handler(Looper.getMainLooper());
 		periodicRunnable = new Runnable()
 		{
@@ -77,7 +76,7 @@ public class RSSIScan_Service extends Service
 					mWakeLock.acquire(WAKELOCK_TIMEOUT);
 			}
 		};
-		//The below code can be used to schedule the periodicaly start the discovery
+		//The below code can be used to schedule the periodically start the discovery
 		//periodicHandler.post(periodicRunnable);
 		//PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		//mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
@@ -96,7 +95,6 @@ public class RSSIScan_Service extends Service
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
 		mWakeLock.acquire(WAKELOCK_TIMEOUT);
-		RSSIReceiverStarted = true;
 	}
 
 	/**

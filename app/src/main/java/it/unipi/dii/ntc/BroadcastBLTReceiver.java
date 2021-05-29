@@ -55,7 +55,6 @@ public class BroadcastBLTReceiver extends BroadcastReceiver
 			String deviceHardwareAddress = device.getAddress(); // MAC address
 			Log.i(TAG, "onReceive: Trovato dispositivo " + deviceName);
 			Log.i(TAG, "onReceive: Trovato dispositivo " + deviceHardwareAddress);
-			//Log.i(TAG, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + device.getUuids());
 			discoveredBLT.put(deviceHardwareAddress, deviceName);
 		}
 		//Show the discovered devices on the table in Add_devices object - UI update
@@ -107,26 +106,4 @@ public class BroadcastBLTReceiver extends BroadcastReceiver
 	}
 
 
-	/*public void sendBluetoothMessage(){
-		BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
-		if (blueAdapter != null) {
-			if (blueAdapter.isEnabled()) {
-				Set<BluetoothDevice> bondedDevices = blueAdapter.getBondedDevices();
-
-				if(bondedDevices.size() > 0) {
-					Object[] devices = (Object []) bondedDevices.toArray();
-					BluetoothDevice device = (BluetoothDevice) devices[position];
-					ParcelUuid[] uuids = device.getUuids();
-					BluetoothSocket socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
-					socket.connect();
-					outputStream = socket.getOutputStream();
-					inStream = socket.getInputStream();
-				}
-
-				Log.e("error", "No appropriate paired devices.");
-			} else {
-				Log.e("error", "Bluetooth is disabled.");
-			}
-		}
-	}*/
 }

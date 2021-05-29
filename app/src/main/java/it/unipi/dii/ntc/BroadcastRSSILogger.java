@@ -32,11 +32,17 @@ public class BroadcastRSSILogger extends BroadcastReceiver
 	}
 
 
+	/**
+	 * This method log the RSSI distances of the known device
+	 * and writes the value in the file csvFileName
+	 * @param context
+	 * @param intent
+	 */
 	@SuppressLint("SetTextI18n")
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		//Log.v(TAG," I AM THE LOGGER !!!!!!");
+
 		int RSSIValue;
 		Long tsLong = System.currentTimeMillis()/1000;
 		String timestampCurrent = tsLong.toString();
@@ -70,6 +76,14 @@ public class BroadcastRSSILogger extends BroadcastReceiver
 		}
 	}
 
+	/**
+	 * This method creates (if not exist) and write in it the logged values
+	 * @param time
+	 * @param deviceMAC
+	 * @param RSSI
+	 * @param c
+	 * @throws IOException
+	 */
 	public void writeInCSV(String time, String deviceMAC, int RSSI, Context c) throws IOException
 	{
 		CSVWriter writer;
@@ -98,10 +112,6 @@ public class BroadcastRSSILogger extends BroadcastReceiver
 			new String[]{time, String.valueOf(referenceDistance), deviceMAC,String.valueOf(RSSI)},
 			true);
 		writer.close();
-
-
 	}
-
-
 
 }
