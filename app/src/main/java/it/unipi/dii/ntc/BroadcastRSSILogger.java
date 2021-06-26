@@ -23,12 +23,14 @@ public class BroadcastRSSILogger extends BroadcastReceiver
 	private RSSIScan_Service rssiService;
 	private String prefFileName = "StoredDevices";
 	private double referenceDistance;
-	private String csvFileName = "IndoorTestRSSILoggingFile.csv";
+	private String csvIndoorFileName = "2FINALIndoorTestRSSILoggingFile.csv";
+	private String csvOutdoorFileName = "2FINALOutdoorTestRSSILogginFile.csv";
+	private boolean outdoor;
 
-	public BroadcastRSSILogger(RSSIScan_Service rssiS, double refDist){
+	public BroadcastRSSILogger(RSSIScan_Service rssiS, double refDist, boolean outdoor_info){
 		rssiService = rssiS;
 		referenceDistance = refDist;
-
+		outdoor = outdoor_info;
 	}
 
 
@@ -68,11 +70,12 @@ public class BroadcastRSSILogger extends BroadcastReceiver
 				}
 				Log.i(TAG, "onReceive: Trovato dispositivo " + device.getName()
 					+ " "+ deviceHardwareAddress +" "+ RSSIValue);
-				rssiService.createNotification(device.getName() + "LOGGING NOTIFICATION");
+				rssiService.createNotification(device.getName() + " " + RSSIValue);
 			}
 		}
 		else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
 			Log.v(TAG,"Logging will start back soon ");
+			BluetoothAdapter.getDefaultAdapter().startDiscovery();
 		}
 	}
 
@@ -87,8 +90,13 @@ public class BroadcastRSSILogger extends BroadcastReceiver
 	public void writeInCSV(String time, String deviceMAC, int RSSI, Context c) throws IOException
 	{
 		CSVWriter writer;
-		File outputFile = new File(c.getFilesDir() + File.separator + csvFileName);
-
+		File outputFile;
+		if(outdoor == false) {
+			outputFile = new File(c.getFilesDir() + File.separator + csvIndoorFileName);
+		}
+		else{
+			outputFile = new File(c.getFilesDir() + File.separator + csvOutdoorFileName);
+		}
 		//Check if CSV file exists if not create it
 		if (!outputFile.exists()) {
 

@@ -17,6 +17,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.Switch;
+import android.widget.Toast;
+
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 import androidx.annotation.NonNull;
@@ -43,8 +46,8 @@ public class MainActivity extends AppCompatActivity
 	public static RSSIScan_Service scanningService;
 	private Intent intentRSSIScan;
 
-	private final double[] distances = {0.5, 1, 1.5, 2};
-
+	//private final double[] distances = {0.5, 1, 1.5, 2};
+	private final double[] distances = {0.50, 0.75, 1, 1.25, 1.50};
 
 	private boolean serviceMonitoringRunning = false;
 	private boolean serviceLoggingRunning = false;
@@ -259,16 +262,21 @@ public class MainActivity extends AppCompatActivity
 		if(serviceLoggingRunning == false) {
 			SeekBar seekBarInfo = findViewById(R.id.prograssionBar);
 			int accessIndex = seekBarInfo.getProgress();
+			boolean outdoor_info = ((Switch) findViewById(R.id.in_out)).isChecked();
 			Log.i(TAG, "INDEX " + accessIndex);
 			Log.i(TAG, "DISTANCE TO MEASURE " + distances[accessIndex]);
+			Log.i(TAG, "OUTDOOR: "+ outdoor_info);
 			//startService(intentRSSIScan);
-			scanningService.startPeriodicScan();
-			scanningService.startRSSILogging(distances[accessIndex]);
+			String toastMsg = "OUT: " + outdoor_info + "DIST: " + distances[accessIndex];
+			Toast toast = Toast.makeText(getApplicationContext(), toastMsg , Toast.LENGTH_LONG);
+			toast.show();
+			//scanningService.startPeriodicScan();
+			scanningService.startRSSILogging(distances[accessIndex], outdoor_info);
 		}
 		else{
 			//stopService(intentRSSIScan);
 			Log.i(TAG, "STOPPING LOGGING SERVICE ");
-			scanningService.stopPeriodicScan();
+			//scanningService.stopPeriodicScan();
 			scanningService.stopRSSILogging();
 		}
 		serviceLoggingRunning = !serviceLoggingRunning;

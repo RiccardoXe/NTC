@@ -115,14 +115,20 @@ public class RSSIScan_Service extends Service
 	 * @param distance_to_monitor: Information needed to know which distance is assicated the
 	 *                           RSSI value
 	 */
-	public void startRSSILogging(double distance_to_monitor){
+	public void startRSSILogging(double distance_to_monitor, boolean outdoor){
 		IntentFilter BLTIntFilter = new IntentFilter();
 		BLTIntFilter.addAction(BluetoothDevice.ACTION_FOUND);
 		BLTIntFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		//getApplicationContext().registerReceiver(RSSILogger, BLTIntFilter);
-		RSSILogger = new BroadcastRSSILogger(this, distance_to_monitor);
+		RSSILogger = new BroadcastRSSILogger(this, distance_to_monitor, outdoor);
 		getApplicationContext().registerReceiver(RSSILogger, BLTIntFilter);
 		RSSILoggerStarted = true;
+		// Start bluetooth
+		if (!BluetoothAdapter.getDefaultAdapter().isEnabled())
+			Log.w(TAG, "Bluetooth is not enabled.");
+		else if (!BluetoothAdapter.getDefaultAdapter().isDiscovering())
+			if (!BluetoothAdapter.getDefaultAdapter().startDiscovery())
+				Log.e(TAG, "Failed to start BT discovery.");
 	}
 
 	/**

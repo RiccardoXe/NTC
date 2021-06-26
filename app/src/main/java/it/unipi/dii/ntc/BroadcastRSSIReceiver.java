@@ -80,8 +80,8 @@ public class BroadcastRSSIReceiver extends BroadcastReceiver
 			}else{
 				Log.i(TAG, "onReceive: OUTDOOR");
 				// TODO:meanRSSi
-				//meanRSSI = outdoorThreshold;
-				meanRSSI = indoorThreshold;
+				meanRSSI = outdoorThreshold;
+				//meanRSSI = indoorThreshold;
 
 			}
 
