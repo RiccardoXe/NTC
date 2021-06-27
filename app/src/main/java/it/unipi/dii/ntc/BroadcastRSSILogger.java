@@ -23,8 +23,8 @@ public class BroadcastRSSILogger extends BroadcastReceiver
 	private RSSIScan_Service rssiService;
 	private String prefFileName = "StoredDevices";
 	private double referenceDistance;
-	private String csvIndoorFileName = "2FINALIndoorTestRSSILoggingFile.csv";
-	private String csvOutdoorFileName = "2FINALOutdoorTestRSSILogginFile.csv";
+	private String csvIndoorFileName = "FACE_FINALIndoorTestRSSILoggingFile.csv";
+	private String csvOutdoorFileName = "FACE_FINALOutdoorTestRSSILogginFile.csv";
 	private boolean outdoor;
 
 	public BroadcastRSSILogger(RSSIScan_Service rssiS, double refDist, boolean outdoor_info){
@@ -71,6 +71,8 @@ public class BroadcastRSSILogger extends BroadcastReceiver
 				Log.i(TAG, "onReceive: Trovato dispositivo " + device.getName()
 					+ " "+ deviceHardwareAddress +" "+ RSSIValue);
 				rssiService.createNotification(device.getName() + " " + RSSIValue);
+				BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+				BluetoothAdapter.getDefaultAdapter().startDiscovery();
 			}
 		}
 		else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
